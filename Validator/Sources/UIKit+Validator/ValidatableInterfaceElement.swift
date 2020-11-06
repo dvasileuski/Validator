@@ -80,7 +80,7 @@ extension ValidatableInterfaceElement {
         
         set(newValue) {
         
-            objc_setAssociatedObject(self, &ValidatableInterfaceElementHandlerKey, n as AnyObject, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self, &ValidatableInterfaceElementHandlerKey, newValue as AnyObject, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
 }
