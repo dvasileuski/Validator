@@ -1,7 +1,7 @@
 import Foundation
 import ObjectiveC
 
-public protocol ValidatableInterfaceElement {
+public protocol ValidatableInterfaceElement: AnyObject {
     
     associatedtype InputType: Validatable
     var inputValue: InputType? { get }
@@ -55,16 +55,19 @@ extension ValidatableInterfaceElement {
     public var validationRules: ValidationRuleSet<InputType>? {
         
         get {
-        
-            return objc_getAssociatedObject(self, &ValidatableInterfaceElementRulesKey) as? ValidationRuleSet<InputType>
+            let storedValue = objc_getAssociatedObject(self, &ValidatableInterfaceElementRulesKey) as? ValidationRuleSet<InputType>
+
+            if storedValue != nil {
+                return storedValue
+            }
+            
+            let newValue = ValidationRuleSet<InputType>()
+            self.validationRules = newValue
+            return newValue
         }
         
         set(newValue) {
-            
-            if let n = newValue {
-            
-                objc_setAssociatedObject(self, &ValidatableInterfaceElementRulesKey, n as AnyObject, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-            }
+            objc_setAssociatedObject(self, &ValidatableInterfaceElementRulesKey, newValue as AnyObject, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     
